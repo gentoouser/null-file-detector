@@ -1,4 +1,4 @@
-import ConfigParser
+import configparser
 import binascii
 import sys
 import os
@@ -8,18 +8,14 @@ import defaults
 def create_default_config(config_file):
     """Sets up a default configuration file."""
 
-    config = ConfigParser.SafeConfigParser(allow_no_value=True)
+    config = configparser.SafeConfigParser(allow_no_value=True)
 
     config.add_section('General')
-    config.set(
-        'General', '# Null character must be a hex byte with no prefix eg. 00, a0, ff')
-    config.set('General', 'null_char', binascii.hexlify(
-        defaults.Default.NULL_CHAR))
-    config.set(
-        'General', '# When true, all subdirectories are scanned by default')
+    config.set('General', '# Null character must be a hex byte with no prefix eg. 00, a0, ff')
+    config.set('General', 'null_char', str(binascii.hexlify(defaults.Default.NULL_CHAR).decode("utf-8")))
+    config.set('General', '# When true, all subdirectories are scanned by default')
     config.set('General', 'recursive', str(defaults.Default.RECURSIVE))
-    config.set(
-        'General', '# Prepends all results with percent null')
+    config.set('General', '# Prepends all results with percent null')
     config.set('General', 'verbose', str(defaults.Default.VERBOSE))
     config.set('General', 'category_1_name', defaults.Default.CAT_1_NAME)
     config.set('General', 'category_2_name', defaults.Default.CAT_2_NAME)
@@ -31,7 +27,7 @@ def create_default_config(config_file):
     config.set('Categories', 'cat3', str(defaults.Default.CAT_3))
 
     if sys.platform.startswith('win'):
-        with open(config_file, 'wb') as configfile:
+        with open(config_file, 'w') as configfile:
             config.write(configfile)
 
         # convert line endings to DOS style '\r\n'
@@ -54,7 +50,7 @@ def read_config(config_file=defaults.Default.CONFIG_NAME):
     config_file_path = os.path.normpath(os.path.join(
         defaults.Default.EXEC_DIRECTORY, config_file))
 
-    config = ConfigParser.SafeConfigParser()
+    config = configparser.SafeConfigParser()
 
     options = config.read(config_file_path)
 
@@ -68,7 +64,7 @@ def read_config(config_file=defaults.Default.CONFIG_NAME):
 
     try:
         config_dict['verbose'] = config.getboolean('General', 'verbose')
-    except (ConfigParser.NoOptionError, ConfigParser.NoSectionError):
+    except (configparser.NoOptionError, configparser.NoSectionError):
         print("NoOptionError: 'verbose' option missing, assuming False "
               "unless set by command line")
         config_dict['verbose'] = defaults.Default.VERBOSE
@@ -79,7 +75,7 @@ def read_config(config_file=defaults.Default.CONFIG_NAME):
     try:
         config_dict['null_char'] = binascii.unhexlify(
             config.get('General', 'null_char'))
-    except (ConfigParser.NoOptionError, ConfigParser.NoSectionError):
+    except (configparser.NoOptionError, configparser.NoSectionError):
         print("NoOptionError: 'null_char' option missing, assuming '\\x00' "
               "unless set by command line")
         config_dict['null_char'] = defaults.Default.NULL_CHAR
@@ -89,7 +85,7 @@ def read_config(config_file=defaults.Default.CONFIG_NAME):
 
     try:
         config_dict['recursive'] = config.getboolean('General', 'recursive')
-    except (ConfigParser.NoOptionError, ConfigParser.NoSectionError):
+    except (configparser.NoOptionError, configparser.NoSectionError):
         print("NoOptionError: 'recursive' option missing, assuming False "
               "unless set by command line")
         config_dict['recursive'] = defaults.Default.RECURSIVE
@@ -103,7 +99,7 @@ def read_config(config_file=defaults.Default.CONFIG_NAME):
     for index, key in enumerate(['category_1_name', 'category_2_name', 'category_3_name']):
         try:
             config_dict[key] = config.get('General', key)
-        except (ConfigParser.NoOptionError, ConfigParser.NoSectionError):
+        except (configparser.NoOptionError, configparser.NoSectionError):
             config_dict[key] = default_names[index]
 
     for key in config._sections:

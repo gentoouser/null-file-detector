@@ -10,11 +10,11 @@ class Default():
     TEST_FILE_NAME = 'test.zip'
     TEST_FILE_SIZE = 4 * 1024 * 1024
     TEST_FILE_NULL_COUNT = 4 * 1024 * 1024 * .25
-    TEST_NULL_CHAR = '\x00'
+    TEST_NULL_CHAR = b'\x00'
 
     # Config defaults
     CONFIG_NAME = 'nfd.cfg'
-    NULL_CHAR = '\x00'
+    NULL_CHAR = b'\x00'
     RECURSIVE = False
     VERBOSE = False
     START_DIRECTORY = '.'

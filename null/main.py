@@ -48,10 +48,10 @@ def main():
     else:
         directories.append(config_dict['start_directory'])
 
-    try:
-        directories[0] = directories[0].decode('unicode-escape')
-    except UnicodeEncodeError:
-        pass
+    #try:
+    #    directories[0] = directories[0].decode('unicode_escape')
+   # except UnicodeEncodeError:
+    #    pass
 
     # Process each directory and file
     # If recursive is not true, only the first directory will be processed
@@ -75,14 +75,14 @@ def main():
     if not config_dict['batch']:
         print('')
         print('Press enter to close.')
-        raw_input()
+        input()
 
 if __name__ == '__main__':
 
     # Record directory that script is located in so that config and log files
     # are generated and read from that directory
     defaults.Default.EXEC_DIRECTORY = os.path.dirname(
-        os.path.realpath(__file__))
+        os.path.realpath(__name__))
 
     freeze_support()
     main()

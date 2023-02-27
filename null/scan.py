@@ -27,7 +27,10 @@ if sys.platform.startswith('win'):
             if hasattr(sys, 'frozen'):
                 # We have to set original _MEIPASS2 value from sys._MEIPASS
                 # to get --onefile mode working.
-                os.putenv('_MEIPASS2', sys._MEIPASS)
+                try: 
+                    os.putenv('_MEIPASS2', sys._MEIPASS)
+                except Exception:
+                    os.putenv('_MEIPASS2',os.path.abspath("."))
             try:
                 super(_Popen, self).__init__(*args, **kw)
             finally:
